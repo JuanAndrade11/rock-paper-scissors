@@ -10,6 +10,18 @@ let beats = {
     "scissors" : "paper"
 };
 
+let playedRounds = 0;
+let playerRounds = 0;
+let computerRounds = 0;
+let tiedRounds = 0;
+
+function resetRounds(){
+    playedRounds = 0;
+    playerRounds = 0;
+    computerRounds = 0;
+    tiedRounds = 0;
+}
+
 function getComputerChoice() {
     return Math.floor(Math.random() * 3) + 1;
 };
@@ -25,34 +37,42 @@ function playRound(playerSelection, computerSelection) {
     };
 };
 
-function playGame() {
-    let playerRounds = 0;
-    let computerRounds = 0;
-    let tiedRounds = 0;
+function playGame(playerSelection) {
+    let computerSelection = options[getComputerChoice()];
+    let roundResult = playRound(playerSelection, computerSelection);
 
-    while (playerRounds < 3 && computerRounds < 3) {
-        let playerSelection = prompt("Type your selection", "rock").toLowerCase();
-        let computerSelection = options[getComputerChoice()];
-        let roundResult = playRound(playerSelection, computerSelection);
+    console.log(roundResult.result);
 
-        console.log(roundResult.result);
-
-        if (roundResult.playerWon) {
-            playerRounds++;
-        } else if (!roundResult.tie) {
-            computerRounds++;
-        } else {
-            tiedRounds++;
-        };
-
-        console.log("Player Rounds " + playerRounds + " Computer Rounds " + computerRounds + " ties " + tiedRounds);
+    if (roundResult.playerWon) {
+        playerRounds++;
+    } else if (!roundResult.tie) {
+        computerRounds++;
+    } else {
+        tiedRounds++;
     };
 
-    if (playerRounds === 3) {
+    playedRounds++;
+
+    console.log("Player Rounds " + playerRounds + " Computer Rounds " + computerRounds + " ties " + tiedRounds + " in " + playedRounds + " rounds.");
+    
+
+    if (playerRounds === 5) {
         console.log("You Win! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
-    } else {
+        resetRounds();
+    } else if (computerRounds === 5) {
         console.log("You Lose! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
+        resetRounds();
     };
 };
 
-playGame();
+document.getElementById("rock").addEventListener("click", () => {
+    playGame("rock");
+});
+
+document.getElementById("paper").addEventListener("click", () => {
+    playGame("paper");
+});
+
+document.getElementById("scissors").addEventListener("click", () => {
+    playGame("scissors");
+});
