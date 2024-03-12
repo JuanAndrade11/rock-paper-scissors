@@ -15,6 +15,12 @@ let playerRounds = 0;
 let computerRounds = 0;
 let tiedRounds = 0;
 
+
+const played = document.getElementById("played");
+const player = document.getElementById("player");
+const computer = document.getElementById("computer");
+const ties = document.getElementById("ties");
+
 function resetRounds(){
     playedRounds = 0;
     playerRounds = 0;
@@ -26,7 +32,7 @@ function getComputerChoice() {
     return Math.floor(Math.random() * 3) + 1;
 };
 
-function playRound(playerSelection, computerSelection) {
+function getResult(playerSelection, computerSelection) {
     let playerBeats = beats[playerSelection];
     if (playerBeats === computerSelection) {
         return { result: "You Win! " + playerSelection + " beats " + computerSelection, playerWon: true };
@@ -37,11 +43,11 @@ function playRound(playerSelection, computerSelection) {
     };
 };
 
-function playGame(playerSelection) {
+function playRound(playerSelection) {
     let computerSelection = options[getComputerChoice()];
-    let roundResult = playRound(playerSelection, computerSelection);
+    let roundResult = getResult(playerSelection, computerSelection);
 
-    console.log(roundResult.result);
+    alert(roundResult.result);
 
     if (roundResult.playerWon) {
         playerRounds++;
@@ -53,26 +59,37 @@ function playGame(playerSelection) {
 
     playedRounds++;
 
-    console.log("Player Rounds " + playerRounds + " Computer Rounds " + computerRounds + " ties " + tiedRounds + " in " + playedRounds + " rounds.");
+    alert("Player Rounds " + playerRounds + " Computer Rounds " + computerRounds + " ties " + tiedRounds + " in " + playedRounds + " rounds.");
     
 
     if (playerRounds === 5) {
-        console.log("You Win! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
+        alert("You Win! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
         resetRounds();
     } else if (computerRounds === 5) {
-        console.log("You Lose! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
+        alert("You Lose! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
         resetRounds();
     };
+
+    updateLabels();
 };
 
+function updateLabels(){
+    played.textContent = "# of Played Rounds: " + playedRounds;
+    player.textContent = "# of Player Wins: " + playerRounds;
+    computer.textContent = "# of Computer Wins: " + computerRounds;
+    ties.textContent = "# of Tied Rounds: " + tiedRounds;
+}
+
 document.getElementById("rock").addEventListener("click", () => {
-    playGame("rock");
+    playRound("rock");
 });
 
 document.getElementById("paper").addEventListener("click", () => {
-    playGame("paper");
+    playRound("paper");
 });
 
 document.getElementById("scissors").addEventListener("click", () => {
-    playGame("scissors");
+    playRound("scissors");
 });
+
+updateLabels();
