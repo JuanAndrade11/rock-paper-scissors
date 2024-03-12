@@ -21,12 +21,14 @@ const player = document.getElementById("player");
 const computer = document.getElementById("computer");
 const ties = document.getElementById("ties");
 
+const logElement = document.getElementById("log");
+
 function resetRounds(){
     playedRounds = 0;
     playerRounds = 0;
     computerRounds = 0;
     tiedRounds = 0;
-}
+};
 
 function getComputerChoice() {
     return Math.floor(Math.random() * 3) + 1;
@@ -47,7 +49,7 @@ function playRound(playerSelection) {
     let computerSelection = options[getComputerChoice()];
     let roundResult = getResult(playerSelection, computerSelection);
 
-    alert(roundResult.result);
+    logMessage(roundResult.result);
 
     if (roundResult.playerWon) {
         playerRounds++;
@@ -59,15 +61,17 @@ function playRound(playerSelection) {
 
     playedRounds++;
 
-    alert("Player Rounds " + playerRounds + " Computer Rounds " + computerRounds + " ties " + tiedRounds + " in " + playedRounds + " rounds.");
+    logMessage("Player Rounds " + playerRounds + " Computer Rounds " + computerRounds + " ties " + tiedRounds + " in " + playedRounds + " rounds.");
     
 
     if (playerRounds === 5) {
         alert("You Win! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
         resetRounds();
+        deleteAllChildElements(logElement);
     } else if (computerRounds === 5) {
         alert("You Lose! " + playerRounds + " to " + computerRounds + " with " + tiedRounds + " ties");
         resetRounds();
+        deleteAllChildElements(logElement);
     };
 
     updateLabels();
@@ -78,7 +82,19 @@ function updateLabels(){
     player.textContent = "# of Player Wins: " + playerRounds;
     computer.textContent = "# of Computer Wins: " + computerRounds;
     ties.textContent = "# of Tied Rounds: " + tiedRounds;
-}
+};
+
+function logMessage(message) {
+    const messageElement = document.createElement("p");
+    messageElement.textContent = message;
+    logElement.appendChild(messageElement);
+};
+
+function deleteAllChildElements(parentElement) {
+    while (parentElement.firstChild) {
+        parentElement.removeChild(parentElement.firstChild);
+    };
+};
 
 document.getElementById("rock").addEventListener("click", () => {
     playRound("rock");
